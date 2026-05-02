@@ -36,8 +36,8 @@
             <div class="button">
                 <button type="submit" value="Save" class="btn">Log In</button>
             </div>
-            <p class="text-muted" style="text-align: center; margin-top: 1rem; margin-bottom: 0.5rem;"><a href="reset.html" style="color: inherit; text-decoration: underline;">Forgot Password?</a></p>
-            <p class="text-muted" style="text-align: center; margin-top: 0.5rem;">Don't have an account? <a href="signup.html" style="color: inherit; text-decoration: underline;">Sign Up</a></p>
+            <p class="text-muted" style="text-align: center; margin-top: 1rem; margin-bottom: 0.5rem;"><a href="reset.php" style="color: inherit; text-decoration: underline;">Forgot Password?</a></p>
+            <p class="text-muted" style="text-align: center; margin-top: 0.5rem;">Don't have an account? <a href="signup.php" style="color: inherit; text-decoration: underline;">Sign Up</a></p>
         </form>    
     </div>
 

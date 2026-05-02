@@ -43,7 +43,7 @@
                 <button type="submit" value="Save" class="btn">Create Account</button>
             </div>
             <div style="text-align: center; margin-top: 15px;">
-                <a href="login.html" class="text-muted" style="text-decoration: underline; font-size: 0.9rem;">Already have an account? Log in.</a>
+                <a href="login.php" class="text-muted" style="text-decoration: underline; font-size: 0.9rem;">Already have an account? Log in.</a>
             </div>
         </form>    
     </div>
