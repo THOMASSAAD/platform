@@ -7,7 +7,7 @@
 ?>
 <?php include 'include/header.php'; ?>
     <div class="container">
-<?php include 'include/aside.php'; ?>
+<?php  include 'include/aside.php'; ?>
 
 
         <main>
