@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+
+
+
+
+
 /*display content info in admin page */
 
 const sideLinks = document.querySelectorAll('.sidebar a');
@@ -74,7 +79,6 @@ document.addEventListener('click', function (e) {
     }
 });
 
-/* --- 2. دالة توزيع وتعبئة البيانات في الفورم --- */
 function generateForm(section, row) {
     // إخفاء جميع أقسام الفورم أولاً (Reset)
     document.querySelectorAll('.modal-form-section').forEach(s => s.style.display = 'none');
@@ -136,15 +140,6 @@ window.onclick = (e) => {
 
 
 
-
-
-
-
-
-
-
-
-
 /*user updata info */
 
 const openProfileModal = document.getElementById('openProfileModal');
@@ -187,3 +182,64 @@ fileInput.onchange = () => {
 
 //     closeModal();
 // });
+
+
+
+
+
+///////nav class active
+
+document.addEventListener("DOMContentLoaded", () => {
+    const navLinks = document.querySelectorAll('.navbar a');
+    
+    const currentPath = window.location.pathname.split('/').pop();
+
+    const currentPage = currentPath === "" ? "index.php" : currentPath;
+
+    navLinks.forEach(link => {
+        const linkPage = link.getAttribute('href');
+
+        if (linkPage === currentPage) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+});
+
+
+
+
+///acamdey extended screen
+
+let placeholder = null;
+
+function openPage() {
+  const original = document.getElementById("original-div");
+  const destination = document.getElementById("destination-container");
+
+  if (original && destination) {
+    placeholder = document.createElement("div");
+    
+    original.parentNode.insertBefore(placeholder, original);
+
+    destination.appendChild(original);
+  }
+
+  document.getElementById('popupPage').style.display = 'block';
+  document.body.style.overflow = 'hidden'; 
+}
+
+function closePage() {
+  const original = document.getElementById("original-div");
+
+  if (original && placeholder) {
+    placeholder.parentNode.insertBefore(original, placeholder);
+    
+    placeholder.remove();
+    placeholder = null;
+  }
+
+  document.getElementById('popupPage').style.display = 'none';
+  document.body.style.overflow = 'auto';
+}

@@ -6,6 +6,8 @@
     <title><?php echo $title; ?></title>
     <link rel="shortcut icon" href="./images/logo.png">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
