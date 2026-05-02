@@ -3,6 +3,7 @@
     $title = "Student Dashboard";
     include 'database/conn.php';
 
+    
 ?>
 <?php include 'include/header.php'; ?>
     <div class="container">

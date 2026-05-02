@@ -12,4 +12,8 @@
    } catch (PDOException $th) {
     throw new PDOException($th->getMessage());
    }
+
+   include 'crud.php';
+   $crud = new crud($pdo);
+   
 ?>

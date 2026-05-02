@@ -60,7 +60,7 @@
             <div class="button">
                 <button type="submit" value="Save" class="btn">Reset Password</button>
             </div>
-            <p class="text-muted" style="text-align: center; margin-top: 1rem; margin-bottom: 0.5rem;"><a href="login.html" style="color: inherit; text-decoration: underline;">Back to Sign In</a></p>
+            <p class="text-muted" style="text-align: center; margin-top: 1rem; margin-bottom: 0.5rem;"><a href="login.php" style="color: inherit; text-decoration: underline;">Back to Sign In</a></p>
         </form>    
     </div>
 

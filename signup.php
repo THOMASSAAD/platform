@@ -22,28 +22,37 @@
    
 
     <div class="change-password-container">
-        <form action="" id="signup-form">
+        <form action="successsignup.php" method="POST" id="signup-form">
             <h2>Sign Up</h2>
             <div class="box">
                 <p class="text-muted">Email</p>
-                <input type="email" id="email" required>
+                <input type="email" name="email" id="email" required>
+            </div>
+            <div class="box">
+                <p class="text-muted">Username</p>
+                <input type="text" name="Username" id="Username" required>
+            </div>
+            <div class="box">
+                <p class="text-muted">Name</p>
+                <input type="text" name="Name" id="Name"  required>
             </div>
 
             <div class="box">
                 <p class="text-muted">Password</p>
-                <input type="password" id="password" required>
+                <input type="password" name="password" id="password" required>
             </div>
-
             <div class="box">
                 <p class="text-muted">Confirm Password</p>
-                <input type="password" id="confirm-password" required>
+                <input type="password" name="confirm_password" id="confirm-password" required>
             </div>
+            
+
 
             <div class="button">
-                <button type="submit" value="Save" class="btn">Create Account</button>
+                <button type="submit" name="submit" value="Save" class="btn">Create Account</button>
             </div>
             <div style="text-align: center; margin-top: 15px;">
-                <a href="login.html" class="text-muted" style="text-decoration: underline; font-size: 0.9rem;">Already have an account? Log in.</a>
+                <a href="login.php" class="text-muted" style="text-decoration: underline; font-size: 0.9rem;">Already have an account? Log in.</a>
             </div>
         </form>    
     </div>

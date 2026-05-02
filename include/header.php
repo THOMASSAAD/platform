@@ -14,7 +14,7 @@
             <h2>Hacker</h2>
         </div>
         <div class="navbar">
-            <a href="index.php" class="active">
+            <a href="index.php" >
                 <span class="material-icons-sharp">home</span>
                 <h3>Home</h3>
             </a>
