@@ -26,9 +26,9 @@
                 <span class="material-icons-sharp">science</span>
                 <h3>Labs</h3>
             </a>
-            <a href="signup.php">
-                <span class="material-icons-sharp">person_add</span>
-                <h3>Sign Up</h3>
+            <a href="Rank.php">
+                <span class="material-icons-sharp">leaderboard</span>
+                <h3>Rank</h3>
             </a>
             <a href="#">
                 <span class="material-icons-sharp" onclick="">logout</span>

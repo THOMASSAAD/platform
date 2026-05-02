@@ -68,6 +68,13 @@
 }
 
 /* Recent Users Table */
+.tab-content {
+    display: none; 
+}
+
+#dashboard-section {
+    display: block;
+}
 .recent-users {
     margin-top: 2rem;
 }
@@ -113,6 +120,53 @@
 }
 .edit-btn { color: var(--color-primary); }
 .delete-btn { color: var(--color-danger); }
+
+
+
+/*adduser/addvlun/addacadmey*/
+
+.add-user-form {
+    background: var(--color-white);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-2);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 2rem;
+    transition: all 300ms ease;
+}
+
+.add-user-form h3 {
+    margin-bottom: 1rem;
+}
+
+.add-user-form .form-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.add-user-form input, 
+.add-user-form select {
+    padding: 0.6rem 1rem;
+    border-radius: var(--border-radius-1);
+    border: 1px solid var(--color-light);
+    background: var(--color-background);
+    color: var(--color-dark);
+    flex: 1;
+    min-width: 150px;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: var(--border-radius-1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+}
+
 
 /* Responsive Adjustments */
 @media screen and (max-width: 1200px) {

@@ -12,42 +12,7 @@
 
 
 </head>
-<body>
-    <header>
-        <div class="logo" title="University Management System">
-            <h2>Hacker</h2>
-        </div>
-        <div class="navbar">
-            <a href="index.html" >
-                <span class="material-icons-sharp">home</span>
-                <h3>Home</h3>
-            </a>
-            <a href="academy.html">
-                <span class="material-icons-sharp">grid_view</span>
-                <h3>Academy</h3>
-            </a>
-            <a href="Labs.html" class=""> 
-                <span class="material-icons-sharp">science</span>
-                <h3>Labs</h3>
-            </a>
-            <a href="signup.html">
-                <span class="material-icons-sharp">person_add</span>
-                <h3>Sign Up</h3>
-            </a>
-            <!-- <a href="#">
-                <span class="material-icons-sharp" onclick="">logout</span>
-                <h3>Logout</h3>
-            </a> -->
-        </div>
-        <div id="profile-btn">
-            <span class="material-icons-sharp">person</span>
-        </div>
-        <div class="theme-toggler">
-            <span class="material-icons-sharp active">light_mode</span>
-            <span class="material-icons-sharp">dark_mode</span>
-        </div>
-        
-    </header>
+<?php include 'include/header.php'; ?>
 
     <div class="change-password-container">
         <form action="">

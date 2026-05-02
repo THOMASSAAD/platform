@@ -7,22 +7,8 @@
 ?>
 <?php include 'include/header.php'; ?>
     <div class="container">
-        <aside>
-            <div class="profile">
-                <div class="top">
-                    <div class="profile-photo">
-                        <img src="./images/profile-1.jpg" alt="">
-                    </div>
-                    <div class="info">
-                        <p>Hey, <b>Abdulrahman Hussien Ahmed </b> </p>
-                    </div>
-                </div>
-                <div class="about">
-                    <h5>Email</h5>
-                    <p>unknown@gmail.com</p>
-                </div>
-            </div>
-        </aside>
+<?php include 'include/aside.php'; ?>
+
 
         <main>
             <h1>Progress</h1>
