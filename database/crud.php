@@ -4,22 +4,22 @@
         function __construct($conn){
             $this->db = $conn;
         }
-        public function insertuser($username,$email,$password,$role_id,$name){
+        public function insertuser($username, $email, $password, $role_id, $name) {
             try {
-                $sql = "INSERT INTO users (username, email, password, role_id, name) VALUES (:username, :email, :password, :role_id, :name)";
+                $this->db->beginTransaction();
+                $sql = "INSERT INTO users (username, email, password, role_id, name) 
+                        VALUES (?, ?, ?, ?, ?)";
                 $stmt = $this->db->prepare($sql);
-                $stmt->bindParam(':username',$username);
-                $stmt->bindParam(':email',$email);
-                $stmt->bindParam(':password',$password);
-                $stmt->bindParam(':role_id',$role_id);
-                $stmt->bindParam(':name',$name);
-                $stmt->execute();
+                $stmt->execute([$username, $email, $password, $role_id, $name]);
+                $this->db->commit();
                 return true;
-            } catch (PDOException $th) {
-                echo $th->getMessage();
-                return false;
+            } catch (PDOException $e) {
+                $this->db->rollBack();
+                // Return the full errorInfo so the caller can detect duplicates
+                return $e->errorInfo;
             }
         }
+
         public function getuser($username){
             try {
                 $sql = "SELECT * FROM users WHERE username=:username";
