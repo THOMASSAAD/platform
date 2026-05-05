@@ -1,68 +1,69 @@
 <?php
-    include_once 'database/conn.php';
-    $adminMessage = '';
-    $adminError = '';
-    $editVulnerability = null;
+include_once 'database/conn.php';
+$adminMessage = '';
+$adminError = '';
+$editVulnerability = null;
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $action = $_POST['vulnerability_action'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['vulnerability_action'] ?? '';
 
-        if ($action === 'add') {
-            $title = trim($_POST['title'] ?? '');
-            $category = trim($_POST['category'] ?? '');
-            $content = trim($_POST['content'] ?? '');
+    if ($action === 'add') {
+        $title = trim($_POST['title'] ?? '');
+        $category = trim($_POST['category'] ?? '');
+        $content = trim($_POST['content'] ?? '');
 
-            if ($title === '' || $category === '' || $content === '') {
-                $adminError = 'All vulnerability fields are required.';
-            } else {
-                $inserted = $crud->insertVulnerability($title, $category, $content);
-                if ($inserted === true) {
-                    header('Location: admin.php?success=added#vulnerabilities-section');
-                    exit();
-                }
-                $adminError = 'Unable to add vulnerability.';
+        if ($title === '' || $category === '' || $content === '') {
+            $adminError = 'All vulnerability fields are required.';
+        } else {
+            $inserted = $crud->insertVulnerability($title, $category, $content);
+            if ($inserted === true) {
+                header('Location: admin.php?success=added#vulnerabilities-section');
+                exit();
             }
+            $adminError = 'Unable to add vulnerability.';
         }
+    }
 
-        if ($action === 'update') {
-            $vulnerability_id = $_POST['vulnerability_id'] ?? '';
-            $title = trim($_POST['title'] ?? '');
-            $category = trim($_POST['category'] ?? '');
-            $content = trim($_POST['content'] ?? '');
+    if ($action === 'update') {
+        $vulnerability_id = $_POST['vulnerability_id'] ?? '';
+        $title = trim($_POST['title'] ?? '');
+        $category = trim($_POST['category'] ?? '');
+        $content = trim($_POST['content'] ?? '');
 
-            if ($vulnerability_id === '' || $title === '' || $category === '' || $content === '') {
-                $adminError = 'All edit fields are required.';
-            } else {
-                $updated = $crud->updateVulnerability($vulnerability_id, $title, $category, $content);
-                if ($updated === true) {
-                    header('Location: admin.php?success=updated#vulnerabilities-section');
-                    exit();
-                }
-                $adminError = 'Unable to update vulnerability.';
+        if ($vulnerability_id === '' || $title === '' || $category === '' || $content === '') {
+            $adminError = 'All edit fields are required.';
+        } else {
+            $updated = $crud->updateVulnerability($vulnerability_id, $title, $category, $content);
+            if ($updated === true) {
+                header('Location: admin.php?success=updated#vulnerabilities-section');
+                exit();
             }
+            $adminError = 'Unable to update vulnerability.';
         }
     }
+}
 
-    if (isset($_GET['delete_vulnerability_id'])) {
-        $deleteId = intval($_GET['delete_vulnerability_id']);
-        $deleted = $crud->deleteVulnerability($deleteId);
-        if ($deleted === true) {
-            header('Location: admin.php?success=deleted#vulnerabilities-section');
-            exit();
-        }
-        $adminError = 'Unable to delete vulnerability.';
+if (isset($_GET['delete_vulnerability_id'])) {
+    $deleteId = intval($_GET['delete_vulnerability_id']);
+    $deleted = $crud->deleteVulnerability($deleteId);
+    if ($deleted === true) {
+        header('Location: admin.php?success=deleted#vulnerabilities-section');
+        exit();
     }
+    $adminError = 'Unable to delete vulnerability.';
+}
 
-    if (isset($_GET['edit_vulnerability_id'])) {
-        $editId = intval($_GET['edit_vulnerability_id']);
-        $editVulnerability = $crud->getVulnerabilityById($editId);
-        if (!$editVulnerability) {
-            $adminError = 'Vulnerability not found.';
-        }
+if (isset($_GET['edit_vulnerability_id'])) {
+    $editId = intval($_GET['edit_vulnerability_id']);
+    $editVulnerability = $crud->getVulnerabilityById($editId);
+    if (!$editVulnerability) {
+        $adminError = 'Vulnerability not found.';
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -71,9 +72,10 @@
     <link rel="shortcut icon" href="./images/logo.png">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="admin.css">
-        <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
+
 <body>
     <header>
         <div class="logo" title="Admin Control Panel">
@@ -117,7 +119,7 @@
             <span class="material-icons-sharp">dark_mode</span>
         </div>
     </header>
-    
+
     <div class="container">
         <aside>
             <div class="profile">
@@ -162,7 +164,7 @@
                     <span class="material-icons-sharp">people</span>
                     <div class="middle">
                         <div class="left">
-                            <?php 
+                            <?php
                             $totalUsers = $crud->gettotalusers();
                             ?>
                             <h3>Total Users</h3>
@@ -183,8 +185,8 @@
                     <span class="material-icons-sharp">warning</span>
                     <div class="middle">
                         <div class="left">
-                            <?php 
-                            $totalVulners = $crud->gettotalvulners();   
+                            <?php
+                            $totalVulners = $crud->gettotalvulners();
                             ?>
                             <h3>Vulnerabilities</h3>
                             <h1><?php echo $totalVulners; ?></h1>
@@ -195,297 +197,299 @@
 
             <div class="recent-users tab-content" id="dashboard-section">
                 <div class="add-user-form">
-        <h3>Add New User</h3>
-       <form  method="POST" action="add_user.php">
-    <div class="form-group">
-        <input type="text" name="username" id="username" placeholder="Username" required>
-        <input type="email" name="email" id="email" placeholder="Email Address" required>
-        <input type="text" name="full_name" id="name" placeholder="Full Name" required>
-        
-        <select name="role_id" id="userRole" required>
-            <option value="">-- Select Role --</option>
-            <?php
-            $roles = $crud->getAllRoles();
-            foreach ($roles as $role) {
-                $roleId = htmlspecialchars($role['role_id']);
-                $roleName = htmlspecialchars($role['role_name']);
-                echo "<option value=\"{$roleId}\">{$roleName}</option>";
-            }
-            ?>
-        </select>
-        
-        <button type="submit" class="btn-primary">
-            <span class="material-icons-sharp">add</span>
-            Add User
-        </button>
-    </div>
-</form>
-              <h2>Manage Users</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>User ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Username</th>
-            <th>Role</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-        <?php
-        // Fetch all users using your pre‑implemented function
-        $users = $crud->getAllUsers();
+                    <h3>Add New User</h3>
+                    <form method="POST" action="add_user.php">
+                        <div class="form-group">
+                            <input type="text" name="username" id="username" placeholder="Username" required>
+                            <input type="email" name="email" id="email" placeholder="Email Address" required>
+                            <input type="text" name="full_name" id="name" placeholder="Full Name" required>
 
-        if ($users !== false && !empty($users)) {
-            foreach ($users as $user) {
-                // Escape output to prevent XSS
-                $userId   = htmlspecialchars($user['user_id'] ?? '');
-                $fullName = htmlspecialchars($user['name'] ?? '');
-                $email    = htmlspecialchars($user['email'] ?? '');
-                $username  = htmlspecialchars($user['username'] ?? '');
-                $roleId   = $user['role_id'] ?? 0;
-                $roleName = match ($roleId) {
-                    1 => 'Student',
-                    2 => 'admin',
-                    default => 'Unknown'
-                };
+                            <select name="role_id" id="userRole" required>
+                                <option value="">-- Select Role --</option>
+                                <?php
+                                $roles = $crud->getAllRoles();
+                                foreach ($roles as $role) {
+                                    $roleId = htmlspecialchars($role['role_id']);
+                                    $roleName = htmlspecialchars($role['role_name']);
+                                    echo "<option value=\"{$roleId}\">{$roleName}</option>";
+                                }
+                                ?>
+                            </select>
 
-                echo '<tr>';
-                echo "<td>$userId</td>";
-                echo "<td>$fullName</td>";
-                echo "<td>$email</td>";
-                echo "<td>$username</td>";
-                echo "<td class=\"primary\">$roleName</td>";
-                echo '<td>
+                            <button type="submit" class="btn-primary">
+                                <span class="material-icons-sharp">add</span>
+                                Add User
+                            </button>
+                        </div>
+                    </form>
+                    <h2>Manage Users</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <?php
+                        // Fetch all users using your pre‑implemented function
+                        $users = $crud->getAllUsers();
+
+                        if ($users !== false && !empty($users)) {
+                            foreach ($users as $user) {
+                                // Escape output to prevent XSS
+                                $userId   = htmlspecialchars($user['user_id'] ?? '');
+                                $fullName = htmlspecialchars($user['name'] ?? '');
+                                $email    = htmlspecialchars($user['email'] ?? '');
+                                $username  = htmlspecialchars($user['username'] ?? '');
+                                $roleId   = $user['role_id'] ?? 0;
+                                $roleName = match ($roleId) {
+                                    1 => 'Student',
+                                    2 => 'admin',
+                                    default => 'Unknown'
+                                };
+
+                                echo '<tr>';
+                                echo "<td>$userId</td>";
+                                echo "<td>$fullName</td>";
+                                echo "<td>$email</td>";
+                                echo "<td>$username</td>";
+                                echo "<td class=\"primary\">$roleName</td>";
+                                echo '<td>
                        <a href="edituser.php?user_id=' . $userId . '" class="btn btn-primary" >Edit User</a>
                        <a href="deleteuser.php?user_id=' . $userId . '" class="btn btn-danger" >Delete User</a>
                       </td>';
-                echo '</tr>';
-            }
-        } else {
-            // Show a message if no users exist or an error occurred
-            echo '<tr><td colspan="5">No users found or database error.</td></tr>';
-        }
-        ?>
-    
-</table>
-            </div>
-
-            <div class="recent-users tab-content" id="academy-section">
-            <div class="add-user-form">
-        <h3>Add New Bug</h3>
-        <form id="newvulnForm">
-            <div class="form-group">
-                <input type="text" id="bugName" placeholder="bug Name" required>
-                <input type="text" id="textBug" placeholder="textBug" required>
-                <select id="catogreyBug">
-                    <option value="Injection">Injection</option>
-                    <option value="Server-Side">Server-Side</option>
-                    <option value="Client-Side">Client-Side</option>
-                    <option value="Authentication">Authentication</option>
-                    <option value="Access Control">Access Control</option>
-                </select>
-                <button type="submit" class="btn-primary">
-                    <span class="material-icons-sharp">add</span>
-                    Add User
-                </button>
-            </div>
-        </form>
-    </div>
-                <h2>Manage acadmey</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Bug ID</th>
-                            <th>Name</th>
-                            <th>catogrey</th>
-                            <th>text</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>#1001</td>
-                            <td>hamza</td>
-                            <td>unknown@gmail.com</td>
-                            <td>text</td>
-                            <td>
-                                <button class="action-btn edit-btn" title="Edit"><span class="material-icons-sharp">edit</span></button>
-                                <button class="action-btn delete-btn" title="Delete"><span class="material-icons-sharp">delete</span></button>
-                            </td>
-                        </tr>
-                        
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="recent-users tab-content" id="vulnerabilities-section">
-                <?php
-                if (!empty($adminError)) {
-                    echo '<div class="alert alert-danger">' . htmlspecialchars($adminError) . '</div>';
-                }
-
-                if (!empty($adminMessage) || isset($_GET['success'])) {
-                    $successText = $adminMessage;
-                    if ($successText === '') {
-                        $status = $_GET['success'] ?? '';
-                        $successText = match ($status) {
-                            'added' => 'Vulnerability added successfully.',
-                            'updated' => 'Vulnerability updated successfully.',
-                            'deleted' => 'Vulnerability deleted successfully.',
-                            default => 'Action completed successfully.',
-                        };
-                    }
-                    echo '<div class="alert alert-success">' . htmlspecialchars($successText) . '</div>';
-                }
-                ?>
-                <div class="add-user-form">
-                    <h3><?php echo $editVulnerability ? 'Edit Vulnerability' : 'Add New Vulnerability'; ?></h3>
-                    <form method="POST" action="admin.php#vulnerabilities-section">
-                        <input type="hidden" name="vulnerability_action" value="<?php echo $editVulnerability ? 'update' : 'add'; ?>">
-                        <?php if ($editVulnerability): ?>
-                            <input type="hidden" name="vulnerability_id" value="<?php echo htmlspecialchars($editVulnerability['vulnerability_id']); ?>">
-                        <?php endif; ?>
-                        <div class="form-group">
-                            <input type="text" name="title" placeholder="Title" value="<?php echo $editVulnerability ? htmlspecialchars($editVulnerability['title']) : ''; ?>" required>
-                            <select name="category" required>
-                                <option value="">-- Select Category --</option>
-                                <option value="Injection" <?php echo ($editVulnerability['category'] ?? '') === 'Injection' ? 'selected' : ''; ?>>Injection</option>
-                                <option value="Server-Side" <?php echo ($editVulnerability['category'] ?? '') === 'Server-Side' ? 'selected' : ''; ?>>Server-Side</option>
-                                <option value="Client-Side" <?php echo ($editVulnerability['category'] ?? '') === 'Client-Side' ? 'selected' : ''; ?>>Client-Side</option>
-                                <option value="Authentication" <?php echo ($editVulnerability['category'] ?? '') === 'Authentication' ? 'selected' : ''; ?>>Authentication</option>
-                                <option value="Access Control" <?php echo ($editVulnerability['category'] ?? '') === 'Access Control' ? 'selected' : ''; ?>>Access Control</option>
-                            </select>
-                            <textarea name="content" placeholder="Content" required><?php echo $editVulnerability ? htmlspecialchars($editVulnerability['content']) : ''; ?></textarea>
-                            <button type="submit" class="btn-primary">
-                                <span class="material-icons-sharp"><?php echo $editVulnerability ? 'edit' : 'add'; ?></span>
-                                <?php echo $editVulnerability ? 'Update Vulnerability' : 'Add Vulnerability'; ?>
-                            </button>
-                            <?php if ($editVulnerability): ?>
-                                <a href="admin.php#vulnerabilities-section" class="btn btn-secondary" style="margin-left: 0.5rem;">Cancel Edit</a>
-                            <?php endif; ?>
-                        </div>
-                    </form>
-                </div>
-                <h2>Manage Vulnerabilities</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Vulnerability ID</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Content Preview</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $vulnerabilities = $crud->getAllVulnerabilities();
-                        if ($vulnerabilities !== false && !empty($vulnerabilities)) {
-                            foreach ($vulnerabilities as $vuln) {
-                                $id = htmlspecialchars($vuln['vulnerability_id']);
-                                $title = htmlspecialchars($vuln['title']);
-                                $category = htmlspecialchars($vuln['category']);
-                                $content = htmlspecialchars(substr($vuln['content'], 0, 50)) . (strlen($vuln['content']) > 50 ? '...' : '');
-                                echo '<tr>';
-                                echo "<td>$id</td>";
-                                echo "<td>$title</td>";
-                                echo "<td>$category</td>";
-                                echo "<td>$content</td>";
-                                echo '<td>';
-                                echo '<a href="admin.php?edit_vulnerability_id=' . $id . '#vulnerabilities-section" class="btn btn-primary">Edit</a>';
-                                echo ' ';
-                                echo '<a href="admin.php?delete_vulnerability_id=' . $id . '#vulnerabilities-section" class="btn btn-danger" onclick="return confirm(\'Are you sure you want to delete this vulnerability?\')">Delete</a>';
-                                echo '</td>';
                                 echo '</tr>';
                             }
                         } else {
-                            echo '<tr><td colspan="5">No vulnerabilities found or database error.</td></tr>';
+                            // Show a message if no users exist or an error occurred
+                            echo '<tr><td colspan="5">No users found or database error.</td></tr>';
                         }
                         ?>
-                    </tbody>
-                </table>
-            </div>
 
-
-
-
-<div id="editModal" class="modal-overlay " >
-    <div class="modal-content">
-        <span class="close-modal material-icons-sharp">close</span>
-        <h2 id="modalTitle">Edit Information</h2>
-        <hr>
-        <div id="modalFormContainer">
-            
-            <!-- 1. قسم المستخدمين (Dashboard) -->
-            <div id="form-dashboard" class="modal-form-section" style="display: none;">
-                <div class="input-group">
-                    <label>User ID</label>
-                    <input type="text" id="updateIdUser" readonly class="readonly-input">
+                    </table>
                 </div>
-                <div class="input-group">
-                    <label>Name</label>
-                    <input type="text" id="updateName">
-                </div>
-                <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" id="updateEmail">
-                </div>
-                <div class="input-group">
-                    <label>Role</label>
-                    <select id="updateRole">
-                        <option value="Student">User</option>
-                        <option value="Admin">Admin</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- 2. قسم الأكاديمية (Academy/Bugs) -->
-            <div id="form-academy" class="modal-form-section" style="display: none;">
-                <div class="input-group">
-                    <label>Bug ID</label>
-                    <input type="text" id="updateIdBug" readonly class="readonly-input">
-                </div>
-                <div class="input-group">
-                    <label>Bug Name</label>
-                    <input type="text" id="updateBugName">
-                </div>
-                <div class="input-group">
-                    <label>Category</label>
-                    <input type="text" id="updateCategory">
-                </div>
-                <div class="input-group">
-                    <label>Details</label>
-                    <input type="text" id="updateBugText">
-                </div>
-            </div>
-
-            <!-- 3. قسم الثغرات (Vulnerabilities) -->
-            <div id="form-vulnerabilities" class="modal-form-section" style="display: none;">
-                <div class="input-group">
-                    <label>Vlun ID</label>
-                    <input type="text" id="updateIdVlun" readonly class="readonly-input">
-                </div>
-                <div class="input-group">
-                    <label>Vulnerability Name</label>
-                    <input type="text" id="updateVlunName">
-                </div>
-                <div class="input-group">
-                    <label>Flag</label>
-                    <input type="text" id="updateFlag">
-                </div>
-                <div class="input-group">
-                    <label>Role Required</label>
-                    <input type="text" id="updateRoleVlun">
-                </div>
-            </div>
-
-            <button class="btn-primary-full" onclick="closeModal()">Update Changes</button>
         </div>
-    </div>
-</div>
+
+                <div class="recent-users tab-content" id="academy-section">
+                    <div class="add-user-form">
+                        <h3>Add New Bug</h3>
+                        <form id="newvulnForm">
+                            <div class="form-group">
+                                <input type="text" id="bugName" placeholder="bug Name" required>
+                                <input type="text" id="textBug" placeholder="textBug" required>
+                                <select id="catogreyBug">
+                                    <option value="Injection">Injection</option>
+                                    <option value="Server-Side">Server-Side</option>
+                                    <option value="Client-Side">Client-Side</option>
+                                    <option value="Authentication">Authentication</option>
+                                    <option value="Access Control">Access Control</option>
+                                </select>
+                                <button type="submit" class="btn-primary">
+                                    <span class="material-icons-sharp">add</span>
+                                    Add User
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <h2>Manage acadmey</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bug ID</th>
+                                <th>Name</th>
+                                <th>catogrey</th>
+                                <th>text</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#1001</td>
+                                <td>hamza</td>
+                                <td>unknown@gmail.com</td>
+                                <td>text</td>
+                                <td>
+                                    <button class="action-btn edit-btn" title="Edit"><span class="material-icons-sharp">edit</span></button>
+                                    <button class="action-btn delete-btn" title="Delete"><span class="material-icons-sharp">delete</span></button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="recent-users tab-content" id="vulnerabilities-section">
+                    <?php
+                    if (!empty($adminError)) {
+                        echo '<div class="alert alert-danger">' . htmlspecialchars($adminError) . '</div>';
+                    }
+
+                    if (!empty($adminMessage) || isset($_GET['success'])) {
+                        $successText = $adminMessage;
+                        if ($successText === '') {
+                            $status = $_GET['success'] ?? '';
+                            $successText = match ($status) {
+                                'added' => 'Vulnerability added successfully.',
+                                'updated' => 'Vulnerability updated successfully.',
+                                'deleted' => 'Vulnerability deleted successfully.',
+                                default => 'Action completed successfully.',
+                            };
+                        }
+                        echo '<div class="alert alert-success">' . htmlspecialchars($successText) . '</div>';
+                    }
+                    ?>
+                    <div class="add-user-form">
+                        <h3><?php echo $editVulnerability ? 'Edit Vulnerability' : 'Add New Vulnerability'; ?></h3>
+                        <form method="POST" action="admin.php#vulnerabilities-section">
+                            <input type="hidden" name="vulnerability_action" value="<?php echo $editVulnerability ? 'update' : 'add'; ?>">
+                            <?php if ($editVulnerability): ?>
+                                <input type="hidden" name="vulnerability_id" value="<?php echo htmlspecialchars($editVulnerability['vulnerability_id']); ?>">
+                            <?php endif; ?>
+                            <div class="form-group">
+                                <input type="text" name="title" placeholder="Title" value="<?php echo $editVulnerability ? htmlspecialchars($editVulnerability['title']) : ''; ?>" required>
+                                <select name="category" required>
+                                    <option value="">-- Select Category --</option>
+                                    <option value="Injection" <?php echo ($editVulnerability['category'] ?? '') === 'Injection' ? 'selected' : ''; ?>>Injection</option>
+                                    <option value="Server-Side" <?php echo ($editVulnerability['category'] ?? '') === 'Server-Side' ? 'selected' : ''; ?>>Server-Side</option>
+                                    <option value="Client-Side" <?php echo ($editVulnerability['category'] ?? '') === 'Client-Side' ? 'selected' : ''; ?>>Client-Side</option>
+                                    <option value="Authentication" <?php echo ($editVulnerability['category'] ?? '') === 'Authentication' ? 'selected' : ''; ?>>Authentication</option>
+                                    <option value="Access Control" <?php echo ($editVulnerability['category'] ?? '') === 'Access Control' ? 'selected' : ''; ?>>Access Control</option>
+                                </select>
+                                <textarea name="content" placeholder="Content" required><?php echo $editVulnerability ? htmlspecialchars($editVulnerability['content']) : ''; ?></textarea>
+                                <button type="submit" class="btn-primary">
+                                    <span class="material-icons-sharp"><?php echo $editVulnerability ? 'edit' : 'add'; ?></span>
+                                    <?php echo $editVulnerability ? 'Update Vulnerability' : 'Add Vulnerability'; ?>
+                                </button>
+                                <?php if ($editVulnerability): ?>
+                                    <a href="admin.php#vulnerabilities-section" class="btn btn-secondary" style="margin-left: 0.5rem;">Cancel Edit</a>
+                                <?php endif; ?>
+                            </div>
+                        </form>
+                    </div>
+                    <h2>Manage Vulnerabilities</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Vulnerability ID</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Content Preview</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $vulnerabilities = $crud->getAllVulnerabilities();
+                            if ($vulnerabilities !== false && !empty($vulnerabilities)) {
+                                foreach ($vulnerabilities as $vuln) {
+                                    $id = htmlspecialchars($vuln['vulnerability_id']);
+                                    $title = htmlspecialchars($vuln['title']);
+                                    $category = htmlspecialchars($vuln['category']);
+                                    $content = htmlspecialchars(substr($vuln['content'], 0, 50)) . (strlen($vuln['content']) > 50 ? '...' : '');
+                                    echo '<tr>';
+                                    echo "<td>$id</td>";
+                                    echo "<td>$title</td>";
+                                    echo "<td>$category</td>";
+                                    echo "<td>$content</td>";
+                                    echo '<td>';
+                                    echo '<a href="admin.php?edit_vulnerability_id=' . $id . '#vulnerabilities-section" class="btn btn-primary">Edit</a>';
+                                    echo ' ';
+                                    echo '<a href="admin.php?delete_vulnerability_id=' . $id . '#vulnerabilities-section" class="btn btn-danger" onclick="return confirm(\'Are you sure you want to delete this vulnerability?\')">Delete</a>';
+                                    echo '</td>';
+                                    echo '</tr>';
+                                }
+                            } else {
+                                echo '<tr><td colspan="5">No vulnerabilities found or database error.</td></tr>';
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+
+                <div id="editModal" class="modal-overlay ">
+                    <div class="modal-content">
+                        <span class="close-modal material-icons-sharp">close</span>
+                        <h2 id="modalTitle">Edit Information</h2>
+                        <hr>
+                        <div id="modalFormContainer">
+
+                            <!-- 1. قسم المستخدمين (Dashboard) -->
+                            <div id="form-dashboard" class="modal-form-section" style="display: none;">
+                                <div class="input-group">
+                                    <label>User ID</label>
+                                    <input type="text" id="updateIdUser" readonly class="readonly-input">
+                                </div>
+                                <div class="input-group">
+                                    <label>Name</label>
+                                    <input type="text" id="updateName">
+                                </div>
+                                <div class="input-group">
+                                    <label>Email</label>
+                                    <input type="email" id="updateEmail">
+                                </div>
+                                <div class="input-group">
+                                    <label>Role</label>
+                                    <select id="updateRole">
+                                        <option value="Student">User</option>
+                                        <option value="Admin">Admin</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 2. قسم الأكاديمية (Academy/Bugs) -->
+                            <div id="form-academy" class="modal-form-section" style="display: none;">
+                                <div class="input-group">
+                                    <label>Bug ID</label>
+                                    <input type="text" id="updateIdBug" readonly class="readonly-input">
+                                </div>
+                                <div class="input-group">
+                                    <label>Bug Name</label>
+                                    <input type="text" id="updateBugName">
+                                </div>
+                                <div class="input-group">
+                                    <label>Category</label>
+                                    <input type="text" id="updateCategory">
+                                </div>
+                                <div class="input-group">
+                                    <label>Details</label>
+                                    <input type="text" id="updateBugText">
+                                </div>
+                            </div>
+
+                            <!-- 3. قسم الثغرات (Vulnerabilities) -->
+                            <div id="form-vulnerabilities" class="modal-form-section" style="display: none;">
+                                <div class="input-group">
+                                    <label>Vlun ID</label>
+                                    <input type="text" id="updateIdVlun" readonly class="readonly-input">
+                                </div>
+                                <div class="input-group">
+                                    <label>Vulnerability Name</label>
+                                    <input type="text" id="updateVlunName">
+                                </div>
+                                <div class="input-group">
+                                    <label>Flag</label>
+                                    <input type="text" id="updateFlag">
+                                </div>
+                                <div class="input-group">
+                                    <label>Role Required</label>
+                                    <input type="text" id="updateRoleVlun">
+                                </div>
+                            </div>
+
+                            <button class="btn-primary-full" onclick="closeModal()">Update Changes</button>
+                        </div>
+                    </div>
+                </div>
         </main>
     </div>
     <script src="app.js"></script>
 </body>
+
 </html>
