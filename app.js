@@ -34,18 +34,33 @@ document.addEventListener('DOMContentLoaded', () => {
 const sideLinks = document.querySelectorAll('.sidebar a');
 const contentSections = document.querySelectorAll('.tab-content');
 
+function showSection(sectionId) {
+    if (!sectionId) return;
+    const targetSection = document.getElementById(sectionId);
+    if (!targetSection) return;
+
+    sideLinks.forEach(item => item.classList.remove('active'));
+    contentSections.forEach(section => section.style.display = 'none');
+
+    const matchingLink = Array.from(sideLinks).find(link => link.getAttribute('data-target') === sectionId);
+    if (matchingLink) {
+        matchingLink.classList.add('active');
+    }
+    targetSection.style.display = 'block';
+}
+
 sideLinks.forEach(link => {
     link.addEventListener('click', function(e) {
-        e.preventDefault(); 
-
-        sideLinks.forEach(item => item.classList.remove('active'));
-        this.classList.add('active');
-
-        contentSections.forEach(section => section.style.display = 'none');
-
+        e.preventDefault();
         const targetId = this.getAttribute('data-target');
-        document.getElementById(targetId).style.display = 'block';
+        showSection(targetId);
+        window.location.hash = targetId;
     });
+});
+
+window.addEventListener('load', () => {
+    const initialHash = window.location.hash ? window.location.hash.substring(1) : 'vulnerabilities-section';
+    showSection(initialHash);
 });
 
 
