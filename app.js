@@ -79,7 +79,6 @@ window.addEventListener('load', () => {
 const modal = document.getElementById('editModal');
 const closeBtn = document.querySelector('.close-modal');
 const modalTitle = document.getElementById('modalTitle');
-
 /* --- 1. مستمع الأحداث لفتح النافذة عند الضغط على زر التعديل --- */
 document.addEventListener('click', function (e) {
     // البحث عن أقرب عنصر يحمل كلاس edit-btn للتأكد من التقاط النقرة بشكل صحيح
@@ -104,10 +103,19 @@ function generateForm(section, row) {
         document.getElementById('form-dashboard').style.display = 'block';
         
         // تعبئة الحقول (ID في الخلية 0، الاسم 1، الإيميل 2، الرتبة 3)
-        document.getElementById('updateIdUser').value = row.cells[0].innerText;
-        document.getElementById('updateName').value    = row.cells[1].innerText;
-        document.getElementById('updateEmail').value   = row.cells[2].innerText;
-        document.getElementById('updateRole').value    = row.cells[3].innerText;
+document.getElementById('updateIdUser').value   = row.cells[0].innerText;
+document.getElementById('updateName').value     = row.cells[1].innerText;
+document.getElementById('updateEmail').value    = row.cells[2].innerText;
+document.getElementById('updateusername').value = row.cells[3].innerText;
+
+// حل مشكلة الـ Role
+let roleText = row.cells[4].innerText.trim(); // "Admin" أو "User"
+
+if (roleText === 'admin') {
+    document.getElementById('updateRole').value = "2"; // قيمة الـ Admin في الـ HTML
+} else {
+    document.getElementById('updateRole').value = "1"; // قيمة الـ User في الـ HTML
+}
     } 
     
     else if (section === 'academy-section') {
@@ -123,13 +131,31 @@ function generateForm(section, row) {
     
     else if (section === 'vulnerabilities-section') {
         modalTitle.innerText = "Edit Vulnerability";
-        document.getElementById('form-vulnerabilities').style.display = 'block';
-        
-        // تعبئة الحقول (ID في الخلية 0، الاسم 1، الـ Flag 2، الرتبة 3)
-        document.getElementById('updateIdVlun').value   = row.cells[0].innerText;
-        document.getElementById('updateVlunName').value = row.cells[1].innerText;
-        document.getElementById('updateFlag').value     = row.cells[2].innerText;
-        document.getElementById('updateRoleVlun').value = row.cells[3].innerText;
+    // إظهار القسم الخاص بالثغرات في المودال
+    document.getElementById('form-vulnerabilities').style.display = 'block';
+    
+    // 1. تعبئة الـ ID (مخفي أو للقراءة فقط)
+    document.getElementById('updateIdVlun').value = row.cells[0].innerText.trim();
+    
+    // 2. تعبئة العنوان (Title)
+    document.getElementById('updateVlunName').value = row.cells[1].innerText.trim();
+    
+    // 3. تعبئة الـ Category (الـ Select Box)
+    const categoryValue = row.cells[2].innerText.trim();
+    const categorySelect = document.getElementById('updateCategoryVlun'); 
+    
+    if (categorySelect) {
+        categorySelect.value = categoryValue;
+    }
+
+    // 4. تعبئة الـ Content (الـ Textarea)
+    // تنبيه: الجدول بيعرض أول 50 حرف بس، فالـ textarea هيملى الـ 50 حرف دول
+    const contentPreview = row.cells[3].innerText.trim();
+    const contentTextArea = document.getElementById('updateContentVlun');
+    
+    if (contentTextArea) {
+        contentTextArea.value = contentPreview;
+    }
     }
 }
 

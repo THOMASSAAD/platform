@@ -247,7 +247,7 @@ if (isset($_GET['edit_vulnerability_id'])) {
                                 $username  = htmlspecialchars($user['username'] ?? '');
                                 $roleId   = $user['role_id'] ?? 0;
                                 $roleName = match ($roleId) {
-                                    1 => 'Student',
+                                    1 => 'user',
                                     2 => 'admin',
                                     default => 'Unknown'
                                 };
@@ -258,10 +258,8 @@ if (isset($_GET['edit_vulnerability_id'])) {
                                 echo "<td>$email</td>";
                                 echo "<td>$username</td>";
                                 echo "<td class=\"primary\">$roleName</td>";
-                                echo '<td>
-                    <a href="edituser.php?user_id=' . $userId . '" class="action-btn edit-btn" ><span class="material-icons-sharp">edit</span></a>
-                       <a href="deleteuser.php?user_id=' . $userId . '" class="action-btn delete-btn" ><span class="material-icons-sharp">delete</span></a>
-                      </td>';
+                                echo ' <td>                               <button class="action-btn edit-btn" title="Edit"><span class="material-icons-sharp">edit</span></button>
+                                <button class="action-btn delete-btn" title="Delete"><span class="material-icons-sharp">delete</span></button>';
                                 echo '</tr>';
                             }
                         } else {
@@ -362,12 +360,8 @@ if (isset($_GET['edit_vulnerability_id'])) {
                             </select>
                             <textarea name="content" placeholder="Content" required><?php echo $editVulnerability ? htmlspecialchars($editVulnerability['content']) : ''; ?></textarea>
                             <button type="submit" class="btn-primary">
-                                <span class="material-icons-sharp"><?php echo $editVulnerability ? 'edit' : 'add'; ?></span>
-                                <?php echo $editVulnerability ? 'Update Vulnerability' : 'Add Vulnerability'; ?>
+                                Add vulnerability
                             </button>
-                            <?php if ($editVulnerability): ?>
-                                <a href="admin.php#vulnerabilities-section" class="btn btn-secondary" style="margin-left: 0.5rem;">Cancel Edit</a>
-                            <?php endif; ?>
                         </div>
                     </form>
                 </div>
@@ -396,11 +390,8 @@ if (isset($_GET['edit_vulnerability_id'])) {
                                 echo "<td>$title</td>";
                                 echo "<td>$category</td>";
                                 echo "<td>$content</td>";
-                                echo '<td>';
-                                echo '<a href="admin.php?edit_vulnerability_id=' . $id . '#vulnerabilities-section" class="action-btn edit-btn"><span class="material-icons-sharp">edit</span></a>';
-                                echo ' ';
-                                echo '<a href="admin.php?delete_vulnerability_id=' . $id . '#vulnerabilities-section" class="action-btn delete-btn" onclick="return confirm(\'Are you sure you want to delete this vulnerability?\')"><span class="material-icons-sharp">delete</span></a>';
-                                echo '</td>';
+                                echo ' <td>  <button class="action-btn edit-btn" title="Edit"><span class="material-icons-sharp">edit</span></button>
+                                <a href="admin.php?delete_vulnerability_id=' . $id . '#vulnerabilities-section" class="action-btn delete-btn" title="Delete"><span class="material-icons-sharp">delete</span></a>';
                                 echo '</tr>';
                             }
                         } else {
@@ -413,7 +404,7 @@ if (isset($_GET['edit_vulnerability_id'])) {
 
 
 
-<!-- 
+
             <div id="editModal" class="modal-overlay ">
                 <div class="modal-content">
                     <span class="close-modal material-icons-sharp">close</span>
@@ -422,26 +413,40 @@ if (isset($_GET['edit_vulnerability_id'])) {
                     <div id="modalFormContainer">
 
                         <div id="form-dashboard" class="modal-form-section" style="display: none;">
-                            <div class="input-group">
-                                <label>User ID</label>
-                                <input type="text" id="updateIdUser" readonly class="readonly-input">
-                            </div>
-                            <div class="input-group">
-                                <label>Name</label>
-                                <input type="text" id="updateName">
-                            </div>
-                            <div class="input-group">
-                                <label>Email</label>
-                                <input type="email" id="updateEmail">
-                            </div>
-                            <div class="input-group">
-                                <label>Role</label>
-                                <select id="updateRole">
-                                    <option value="Student">User</option>
-                                    <option value="Admin">Admin</option>
-                                </select>
-                            </div>
-                            
+                            <form action="succedit.php" method="POST">
+                                <h2>Edit User</h2>
+
+                                <div class="input-group">
+                                    <label>User ID</label>
+                                    <input type="text" name="user_id" id="updateIdUser" readonly class="readonly-input">
+                                </div>
+
+                                <div class="input-group">
+                                    <label>Name</label>
+                                    <input type="text" name="Name" id="updateName" required>
+                                </div>
+
+                                <div class="input-group">
+                                    <label>Email</label>
+                                    <input type="email" name="email" id="updateEmail" readonly required>
+                                </div>
+
+                                <div class="input-group">
+                                    <label>Username</label>
+                                    <input type="text" name="Username" id="updateusername" required>
+                                </div>
+
+                                <div class="input-group">
+                                    <label>Role</label>
+                                    <select name="role_value"  id="updateRole">
+                                        <option value="1">User</option>
+                                        <option value="2">Admin</option>
+                                    </select>
+                                    
+                                </div>
+
+                                <button type="submit" name="submit" class="btn-primary-full" >Update Changes</button>
+                            </form>
                         </div>
 
                         <div id="form-academy" class="modal-form-section" style="display: none;">
@@ -463,29 +468,53 @@ if (isset($_GET['edit_vulnerability_id'])) {
                             </div>
                         </div>
 
-                        <div id="form-vulnerabilities" class="modal-form-section" style="display: none;">
-                            <div class="input-group">
-                                <label>Vlun ID</label>
-                                <input type="text" id="updateIdVlun" readonly class="readonly-input">
-                            </div>
-                            <div class="input-group">
-                                <label>Vulnerability Name</label>
-                                <input type="text" id="updateVlunName">
-                            </div>
-                            <div class="input-group">
-                                <label>Flag</label>
-                                <input type="text" id="updateFlag">
-                            </div>
-                            <div class="input-group">
-                                <label>Role Required</label>
-                                <input type="text" id="updateRoleVlun">
-                            </div>
-                        </div>
+<div id="form-vulnerabilities" class="modal-form-section" style="display: none;">
+    <!-- بداية الفورم -->
+    <form action="admin.php#vulnerabilities-section" method="POST">
+        <!-- هيدن أكشن عشان السيرفر يعرف إننا بنعدل ثغرة -->
+        <input type="hidden" name="vulnerability_action" value="update">
 
-                        <button class="btn-primary-full" onclick="closeModal()">Update Changes</button>
+        <div class="input-group">
+            <label>Vlun ID</label>
+            <!-- لازم ندي اسم (name) للحقل عشان يتبعت للـ PHP -->
+            <input type="text" name="vulnerability_id" id="updateIdVlun" readonly class="readonly-input">
+        </div>
+
+        <div class="input-group">
+            <label>Title</label>
+            <input type="text" name="title" id="updateVlunName" required>
+        </div>
+
+        <div class="input-group">
+            <label>Category</label>
+            <select name="category" id="updateCategoryVlun" required>
+                <option value="">-- Select Category --</option>
+                <option value="Injection">Injection</option>
+                <option value="Server-Side">Server-Side</option>
+                <option value="Client-Side">Client-Side</option>
+                <option value="Authentication">Authentication</option>
+                <option value="Access Control">Access Control</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Content Preview</label>
+            <textarea name="content" id="updateContentVlun" rows="4" required></textarea>
+        </div>
+
+        <!-- زرار الحفظ داخل الفورم -->
+        <div class="input-group">
+            <button type="submit" name="save_vulnerability" class="btn-primary-full">
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+
                     </div>
                 </div>
-            </div> -->
+            </div>
         </main>
     </div>
     <script src="app.js"></script>

@@ -101,17 +101,22 @@
                 return false;
             }
         }
-       public function updateuser($user_id, $role_id, $name) {
-            try {
-                $sql = "UPDATE users SET role_id = ?, name = ? WHERE user_id = ?";
-                $stmt = $this->db->prepare($sql);
-                $stmt->execute([$role_id, $name, $user_id]);
-                return true;
-            } catch (PDOException $th) {
-                echo $th->getMessage();
-                return false;
-            }
-        }
+public function updateuser($user_id, $role_id, $name, $email, $username) {
+    try {
+        // تحديث كل الحقول المطلوبة
+        $sql = "UPDATE users SET role_id = ?, name = ?, email = ?, username = ? WHERE user_id = ?";
+        $stmt = $this->db->prepare($sql);
+        
+        // ترتيب المتغيرات في المصفوفة يجب أن يطابق ترتيب علامات الاستفهام (?)
+        $stmt->execute([$role_id, $name, $email, $username, $user_id]);
+        
+        return true;
+    } catch (PDOException $th) {
+        // في بيئة الإنتاج يفضل تسجيل الخطأ بدلاً من طباعته مباشرة
+        error_log($th->getMessage());
+        return false;
+    }
+}
         Public function deleteuser($user_id) {
             try {
                 $sql = "DELETE FROM users WHERE user_id = ?";
