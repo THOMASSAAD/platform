@@ -93,7 +93,7 @@ document.addEventListener('click', function (e) {
     }
 });
 
-function generateForm(section, row) {
+function generateForm(section, row ,btn) {
     // إخفاء جميع أقسام الفورم أولاً (Reset)
     document.querySelectorAll('.modal-form-section').forEach(s => s.style.display = 'none');
 
@@ -150,11 +150,12 @@ if (roleText === 'admin') {
 
     // 4. تعبئة الـ Content (الـ Textarea)
     // تنبيه: الجدول بيعرض أول 50 حرف بس، فالـ textarea هيملى الـ 50 حرف دول
-    const contentPreview = row.cells[3].innerText.trim();
     const contentTextArea = document.getElementById('updateContentVlun');
-    
+    const fullContent = btn.getAttribute('data-full-content');
+
+
     if (contentTextArea) {
-        contentTextArea.value = contentPreview;
+        contentTextArea.value = fullContent;
     }
     }
 }
