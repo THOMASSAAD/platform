@@ -188,6 +188,20 @@ public function updateuser($user_id, $role_id, $name, $email, $username) {
                 return false;
             }
         }
+        public function getuserlogin($username, $password){
+            try {
+                $sql = "SELECT * FROM users WHERE username=:username AND password=:password";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindParam(':username',$username);
+                $stmt->bindParam(':password',$password);
+                $stmt->execute();
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+            } catch (PDOException $th) {
+                echo $th->getMessage();
+                return false;
+            }
+        }
+        
         
 
     }

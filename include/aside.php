@@ -1,22 +1,43 @@
 <aside>
   <div class="profile">
+    <?php 
+      $profileName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest';
+      $profileEmail = isset($_SESSION['email']) ? $_SESSION['email'] : 'unknown@gmail.com';
+    ?>
     <div class="top">
       <div class="profile-photo">
         <img id="profileImage" src="./images/profile-1.jpg" alt="Profile picture" />
       </div>
       <div class="info">
-        <p>Hey, <b id="profileName">Abdulrahman Hussien Ahmed</b></p>
+        <p>Hey, <b id="profileName"><?php echo $profileName; ?></b></p>
       </div>
     </div>
     <div class="about">
       <h5>Email</h5>
-      <p id="profileEmail">unknown@gmail.com</p>
+      <p id="profileEmail"><?php echo $profileEmail; ?></p>
     </div>
     <button id="openProfileModal" class="btn-primary-full">
       <span class="material-icons-sharp">manage_accounts</span>
       Edit Profile
     </button>
   </div>
+  
+    <div class="sidebar">
+        <!-- <a href="#" class="active" data-target="dashboard-section">
+           <span class="material-icons-sharp">dashboard</span>
+           <h3>Dashboard</h3>
+        </a>
+        <a href="#" data-target="academy-section">
+        <span class="material-icons-sharp">science</span>
+        <h3>Academy</h3>
+        </a>
+        <a href="#" data-target="vulnerabilities-section">
+          <span class="material-icons-sharp">security</span>
+           <h3>Vulnerabilities</h3>
+         </a> -->
+        
+
+</div>
 
   <!-- Modal -->
   <div id="editModal" class="modal-overlay">

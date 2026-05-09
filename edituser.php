@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start session to store error messages
+// Start session to store error messages
 $title = "Edit User";
 include 'include/header.php';
 include 'database/conn.php';

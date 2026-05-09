@@ -64,20 +64,27 @@ if (isset($_GET['edit_vulnerability_id'])) {
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<?php
+$title = "Admin Dashboard"; 
+include 'include/header.php';
+echo '<div class="container">';
+include 'include/aside.php';
+?>
+
+<!-- <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Dashboard</title>
+    <title><?php echo $title; ?></title>
     <link rel="shortcut icon" href="./images/logo.png">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="admin.css">
     <link rel="stylesheet" href="style.css">
 
-</head>
+</head> -->
 
-<body>
-    <header>
+<!-- <body> -->
+    <!-- <header>
         <div class="logo" title="Admin Control Panel">
             <h2>Admin<span class="danger">Panel</span></h2>
         </div>
@@ -118,10 +125,10 @@ if (isset($_GET['edit_vulnerability_id'])) {
             <span class="material-icons-sharp active">light_mode</span>
             <span class="material-icons-sharp">dark_mode</span>
         </div>
-    </header>
+    </header> -->
 
-    <div class="container">
-        <aside>
+    <!-- <div class="container"> -->
+        <!-- <aside>
             <div class="profile">
                 <div class="top">
                     <div class="profile-photo">
@@ -138,7 +145,7 @@ if (isset($_GET['edit_vulnerability_id'])) {
             </div>
 
             <!-- Admin Sidebar Navigation -->
-            <div class="sidebar">
+            <!-- <div class="sidebar">
                 <a href="#" class="active" data-target="dashboard-section">
                     <span class="material-icons-sharp">dashboard</span>
                     <h3>Dashboard</h3>
@@ -153,8 +160,22 @@ if (isset($_GET['edit_vulnerability_id'])) {
                 </a>
 
             </div>
-        </aside>
+        </aside> --> 
+        <div class="sidebar">
+                <a href="#" class="active" data-target="dashboard-section">
+                    <span class="material-icons-sharp">dashboard</span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a href="#" data-target="academy-section">
+                    <span class="material-icons-sharp">science</span>
+                    <h3>Academy</h3>
+                </a>
+                <a href="#" data-target="vulnerabilities-section">
+                    <span class="material-icons-sharp">security</span>
+                    <h3>Vulnerabilities</h3>
+                </a>
 
+            </div>
         <main>
             <h1>Dashboard Overview</h1>
             <p class="text-muted" style="margin-bottom: 1rem;">Welcome to the vulnerable Admin Panel. Monitor and manage system resources below.</p>
@@ -258,8 +279,8 @@ if (isset($_GET['edit_vulnerability_id'])) {
                                 echo "<td>$email</td>";
                                 echo "<td>$username</td>";
                                 echo "<td class=\"primary\">$roleName</td>";
-                                echo ' <td>                               <button class="action-btn edit-btn" title="Edit"><span class="material-icons-sharp">edit</span></button>
-                                <button class="action-btn delete-btn" title="Delete"><span class="material-icons-sharp">delete</span></button>';
+                                echo ' <td><a href="edituser.php?user_id=' . $userId .'" class="action-btn edit-btn" title="Edit"><span class="material-icons-sharp">edit</span></a>';
+                                echo '<a href="deleteuser.php?user_id=' . $userId .'" class="action-btn delete-btn" title="Delete"><span class="material-icons-sharp">delete</span></a>';
                                 echo '</tr>';
                             }
                         } else {

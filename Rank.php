@@ -2,7 +2,12 @@
 <html lang="en">
 
 <body>
-    <?php include 'include/header.php'; ?>
+    <?php 
+     $title = "Rank";
+    include 'include/header.php';
+       
+    
+    ?>
     <div class="container">
     <?php include 'include/aside.php'; ?>
 
