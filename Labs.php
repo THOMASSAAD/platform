@@ -60,7 +60,7 @@
                 <form action="">
                 <div class="label">
                   <label for="flag">What is the flag1?</label>
-                  <button class="easy">Easy</button>
+                  
                 </div>
 
                 <div class="buttons">
@@ -157,8 +157,8 @@
               <div class="inputsolution">
                 <form action="">
                 <div class="label">
-                  <label for="flag">What is the flag1?</label>
-                  <button class="easy">Easy</button>
+                  <label for="flag">What is the flag?</label>
+                  <button class="easy">Hard</button>
                 </div>
 
                 <div class="buttons">

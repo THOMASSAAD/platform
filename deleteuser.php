@@ -1,6 +1,6 @@
 <?php
+include 'include/admin_auth.php';
 include 'database/conn.php';
-include 'include/session.php';
 
 // Check if user_id is provided
 if (!isset($_GET['user_id']) || empty($_GET['user_id'])) {

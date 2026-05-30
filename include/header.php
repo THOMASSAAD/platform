@@ -2,6 +2,7 @@
 
 <?php 
     include 'session.php';
+  
 ?>
 
 <head>

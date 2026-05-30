@@ -1,4 +1,5 @@
 <?php
+include 'include/admin_auth.php';
 // Start session to store error messages
 $title = "Edit User";
 include 'include/header.php';

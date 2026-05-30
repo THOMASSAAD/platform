@@ -1,6 +1,6 @@
 <?php
+include 'include/admin_auth.php';
 include 'database/conn.php';
-include 'include/session.php';
 
 echo "ksksksksk";
 print_r($_POST);
