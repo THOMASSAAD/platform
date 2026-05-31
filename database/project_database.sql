@@ -29,7 +29,7 @@ CREATE TABLE `flags` (
   `hint` text,
   PRIMARY KEY (`flag_id`),
   UNIQUE KEY `flag_value` (`flag_value`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,6 +38,7 @@ CREATE TABLE `flags` (
 
 LOCK TABLES `flags` WRITE;
 /*!40000 ALTER TABLE `flags` DISABLE KEYS */;
+INSERT INTO `flags` VALUES (1,'FLAG{RCE_SUCCESSFUL_BYPASS_8899}','2','Take a closer look at how the application validates uploaded files. The restriction may rely on something easier to manipulate than the actual file content.'),(2,'FLAG{IDOR_BY_HUNTER_USER_}','2','Try sending a different user ID than the one stored in your session and observe what happens in the response.'),(3,'FLAG{Y0u_Byp4ssed_JS_L0gic}','2','Check the condition that triggers the flag carefully, especially how the password comparison is performed before or after the update operation.'),(4,'FLAG{SQL_INJECTION_MASTER_2026_flaaaaaaaaaaaaag}','2','SQL Injection (with Error-Based + Log-Based Detection) - Check how user input is directly inserted into the SQL query without any sanitization or prepared statements. Observe how SQL errors or patterns in the error message may reveal sensitive behavior or hidden logic.'),(5,'flag{XSS_IS_FUN_AND_DANGEROUS}','2','Check how user input is displayed in the application after submission. The key may lie in whether the input is properly sanitized before being rendered.'),(6,'FLAG{LFI_ASWAN_SUCCESS_2026}','2','Check how the page parameter is handled before being included, especially after any string replacement.'),(7,'FLAG{ADVANCED_IDOR_ROLE_JUMP_2026}','2','Check whether sensitive decisions (like admin access) rely on user-controlled hidden fields instead of trusted server-side session data.'),(8,'FLAG{cfcd208495d565ef66e7dff9f98764da}','1','Some URLs have numbers that don\'t belong to you. Change one and see if the server still talks nicely.'),(9,'FLAG{6512bd43d9caa6e02c990b0a82652dca}','1','The most common keys open the most common doors. Try the top 10 worst passwords ever.'),(10,'FLAG{e99a18c428cb38d5f260853678922e03}','1','What if your search terms could speak? Try giving it a message wrapped in < and >.'),(11,'FLAG{37b51d194a7513e45b56f6524f2d51f2}','1','Developers leave notes in hidden places. Check the history book of the code.'),(12,'FLAG{1679091c5a880faf6fb5e6087eb1b2dc}','1','Some files tell crawlers where not to go. Visit the road map of disallowed paths.'),(13,'FLAG{7d793037a6d2e824e8dca}','1','A single quote can break a query. When it screams, listen to the error – it might whisper a secret.'),(14,'FLAG{8f14e45fceea167a5a36de}','1','If the database can read files, why not ask it to read the flag? Combine breaking the query with asking for a file.'),(15,'FLAG{0123456789abcdef0123456789abcdef}','1','The price tag is just a suggestion if you control what the server sees. Modify the number before checkout.'),(16,'FLAG{RCE-12abeodirsb342dwswerxmenotos}','1','A picture can hide more than pixels. Upload a wolf in sheep\'s clothing, then call it from the web.'),(17,'Flag{SSRF-abwe.shccaseownd123.s20050x}','1','Why fetch from the internet when you can fetch from the server\'s own hard drive? Change http:// to file://'),(18,'FLAG{0af42709442b3c7f85eaabdfc15a6567}','3','What happens if a required field goes missing during a multi-step process? The server might trust the client to tell it which step is complete.'),(19,'FLAG{bb935b231fa76295d0a5409f195c371c}','3','Sometimes a single quote, a parenthesis, and a few angle brackets can become an unexpected conversation with the browser. Try to make it alert().'),(20,'FLAG{69b60d01cf5e1e0006032fa5d361cae9}','3','Not all XSS show themselves immediately. Some wait for a privileged eye to read your words. Where do they go? Who reads them? And what do they carry with them?'),(21,'FLAG{3cf3d31ddaffdb824b1d9b7}','3','UNION requires columns, but the filter swallows keywords whole. Feed them twice – once for the filter, once for the database. Hex speaks louder than strings.'),(22,'FLAG{0d8efc10b901bb1359924d5}','3','extractvalue() loves to complain. Give it a reason to complain about something you want to see. MySQL error messages are surprisingly talkative.'),(23,'FLAG{34xmshelaoshe3342mch42}','3','Can you make the database read a file instead of a row? The error message will hold the file\'s secret – if you ask nicely with double words.');
 /*!40000 ALTER TABLE `flags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -115,6 +116,7 @@ CREATE TABLE `user_flags` (
 
 LOCK TABLES `user_flags` WRITE;
 /*!40000 ALTER TABLE `user_flags` DISABLE KEYS */;
+INSERT INTO `user_flags` VALUES (24,5,'2026-05-31 01:01:44'),(24,6,'2026-05-31 01:31:11');
 /*!40000 ALTER TABLE `user_flags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -140,7 +142,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `unique_email` (`email`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -149,7 +151,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (11,'jkhghjfhcjhnv  jhhjjh','thomas_saad+2@intigriti.me','tep23122jklkjlkj004@gmail.com',1,0,'$2y$10$Py9j7kFWgfyWOFLrJQtwQOReLQCpbc23cje39Pk9H.l51eeMex7AO'),(14,'fortest','fortest','fortest@gmail.com',2,0,'$2y$10$3is6T6hhTgfXSF3OyTigL.HfHXPKOTn1bQvKEGN4q46W7q5HyBlJ.'),(15,'fortest','fortest1','fortest1@gmail.com',2,0,'$2y$10$VsVI/DA8Qkjp0GhRjymeZOtoWa.iROgDe93MYIOEq5RRb1hits/BO'),(16,'fortest2','fortest2','fortest2@gmail.com',1,0,'$2y$10$/Uow55nTV6uGbrQ5z0Dzb.jgftRmUhHuYWPOecS4MsCVdrPBKqJIO'),(21,'helloworld10','fortest5jkhg','test@test.com',2,0,'$2y$10$2B4GUlAdq5AHlkC/yrWjqu4dKuFqBwqsIvqAx2pS6/2XBUT13nPzi'),(22,'helloworld','admin','x_tooom@wearehackerone.com',2,0,'$2y$10$OkMxyuv71TEe8aoxLzfeWu3Rpfv2CRWUsvIGGIk/7CY/4zmNcTBHi'),(23,'Supervisor','EPTEST1369','tep23122004@gmail.com',1,0,'$2y$10$sqoLbimQQSrAY4GH.zhX1eiyHrXJui2V.mitqfwbJfR/mV2Ic85Cm');
+INSERT INTO `users` VALUES (11,'jkhghjfhcjhnv  jhhjjh','thomas_saad+2@intigriti.me','tep23122jklkjlkj004@gmail.com',1,0,'$2y$10$Py9j7kFWgfyWOFLrJQtwQOReLQCpbc23cje39Pk9H.l51eeMex7AO'),(14,'fortest','fortest','fortest@gmail.com',2,0,'$2y$10$3is6T6hhTgfXSF3OyTigL.HfHXPKOTn1bQvKEGN4q46W7q5HyBlJ.'),(15,'fortest','fortest1','fortest1@gmail.com',2,0,'$2y$10$VsVI/DA8Qkjp0GhRjymeZOtoWa.iROgDe93MYIOEq5RRb1hits/BO'),(16,'fortest2','fortest2','fortest2@gmail.com',1,0,'$2y$10$/Uow55nTV6uGbrQ5z0Dzb.jgftRmUhHuYWPOecS4MsCVdrPBKqJIO'),(21,'helloworld10','fortest5jkhg','test@test.com',2,0,'$2y$10$2B4GUlAdq5AHlkC/yrWjqu4dKuFqBwqsIvqAx2pS6/2XBUT13nPzi'),(22,'helloworld','admin','x_tooom@wearehackerone.com',2,0,'$2y$10$OkMxyuv71TEe8aoxLzfeWu3Rpfv2CRWUsvIGGIk/7CY/4zmNcTBHi'),(23,'Supervisor','EPTEST1369','tep23122004@gmail.com',1,0,'$2y$10$sqoLbimQQSrAY4GH.zhX1eiyHrXJui2V.mitqfwbJfR/mV2Ic85Cm'),(24,'helloworld','CON2370','test1@test.com',1,2,'$2y$10$v1uyAUu8FQAr6aSUnO8FiuiUTKFaEHcWiLTPKnuYzsOgh8oGitcW6');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,4 +190,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-05-31  3:15:13
+-- Dump completed on 2026-05-31  4:52:06
