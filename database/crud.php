@@ -201,8 +201,147 @@ public function updateuser($user_id, $role_id, $name, $email, $username) {
                 return false;
             }
         }
-        
-        
+
+        // Flag Management Methods
+        public function getFlagByValue($flag_value) {
+            try {
+                $sql = "SELECT * FROM flags WHERE flag_value = ?";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$flag_value]);
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+            } catch (PDOException $th) {
+                error_log($th->getMessage());
+                return false;
+            }
+        }
+
+        public function addUserFlag($user_id, $flag_id) {
+            try {
+                // Check if user already has this flag
+                $sql = "SELECT * FROM user_flags WHERE user_id = ? AND flag_id = ?";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$user_id, $flag_id]);
+                
+                if ($stmt->rowCount() > 0) {
+                    return ['status' => 'duplicate', 'message' => 'You have already found this flag'];
+                }
+
+                // Add the flag to user_flags
+                $sql = "INSERT INTO user_flags (user_id, flag_id) VALUES (?, ?)";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$user_id, $flag_id]);
+
+                // Update user's found flags count
+                $sql = "UPDATE users SET number_found_flags = number_found_flags + 1 WHERE user_id = ?";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$user_id]);
+
+                return ['status' => 'success', 'message' => 'Flag added successfully'];
+            } catch (PDOException $th) {
+                error_log($th->getMessage());
+                return ['status' => 'error', 'message' => 'Database error'];
+            }
+        }
+
+        public function getAllFlags() {
+            try {
+                $sql = "SELECT * FROM flags ORDER BY level ASC, flag_id ASC";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute();
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $th) {
+                error_log($th->getMessage());
+                return false;
+            }
+        }
+
+        public function getFlagsByLevel($level) {
+            try {
+                $sql = "SELECT * FROM flags WHERE level = ? ORDER BY flag_id ASC";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$level]);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $th) {
+                error_log($th->getMessage());
+                return false;
+            }
+        }
+
+        public function getUserFlags($user_id) {
+            try {
+                $sql = "SELECT f.*, uf.found_at FROM flags f 
+                        INNER JOIN user_flags uf ON f.flag_id = uf.flag_id 
+                        WHERE uf.user_id = ? 
+                        ORDER BY f.level ASC, f.flag_id ASC";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$user_id]);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $th) {
+                error_log($th->getMessage());
+                return false;
+            }
+        }
+
+        public function getUserFlagsByLevel($user_id, $level) {
+            try {
+                $sql = "SELECT f.*, uf.found_at FROM flags f 
+                        INNER JOIN user_flags uf ON f.flag_id = uf.flag_id 
+                        WHERE uf.user_id = ? AND f.level = ? 
+                        ORDER BY f.flag_id ASC";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$user_id, $level]);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $th) {
+                error_log($th->getMessage());
+                return false;
+            }
+        }
+
+        public function getFlagById($flag_id) {
+            try {
+                $sql = "SELECT * FROM flags WHERE flag_id = ?";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$flag_id]);
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+            } catch (PDOException $th) {
+                error_log($th->getMessage());
+                return false;
+            }
+        }
+
+        public function getUsersWithFlag($flag_id) {
+            try {
+                $sql = "SELECT u.user_id, u.name, u.username, uf.found_at FROM users u 
+                        INNER JOIN user_flags uf ON u.user_id = uf.user_id 
+                        WHERE uf.flag_id = ? 
+                        ORDER BY uf.found_at ASC";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$flag_id]);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $th) {
+                error_log($th->getMessage());
+                return false;
+            }
+        }
+        public function getRanking() {
+            try {
+                $sql = "
+                    SELECT 
+                        u.user_id,
+                        u.name,
+                        u.username,
+                        u.number_found_flags AS Foundedflags
+                    FROM users u
+                    ORDER BY u.number_found_flags DESC, u.name ASC
+                ";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute();
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $th) {
+                error_log($th->getMessage());
+                return false;
+            }
+        }
 
     }
 
