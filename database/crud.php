@@ -343,6 +343,61 @@ public function updateuser($user_id, $role_id, $name, $email, $username) {
             }
         }
 
+        // New Flag Management CRUD Functions
+        public function insertFlag($flag_value, $level, $hint = '') {
+            try {
+                $sql = "INSERT INTO flags (flag_value, level, hint) VALUES (?, ?, ?)";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$flag_value, $level, $hint]);
+                return true;
+            } catch (PDOException $th) {
+                error_log($th->getMessage());
+                return false;
+            }
+        }
+
+        public function updateFlag($flag_id, $flag_value, $level, $hint = '') {
+            try {
+                $sql = "UPDATE flags SET flag_value = ?, level = ?, hint = ? WHERE flag_id = ?";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$flag_value, $level, $hint, $flag_id]);
+                return true;
+            } catch (PDOException $th) {
+                error_log($th->getMessage());
+                return false;
+            }
+        }
+
+        public function deleteFlag($flag_id) {
+            try {
+                // First delete related user_flags records
+                $sql = "DELETE FROM user_flags WHERE flag_id = ?";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$flag_id]);
+                
+                // Then delete the flag
+                $sql = "DELETE FROM flags WHERE flag_id = ?";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([$flag_id]);
+                return true;
+            } catch (PDOException $th) {
+                error_log($th->getMessage());
+                return false;
+            }
+        }
+
+        public function getTotalFlags() {
+            try {
+                $sql = "SELECT COUNT(*) as total FROM flags";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute();
+                return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+            } catch (PDOException $th) {
+                error_log($th->getMessage());
+                return false;
+            }
+        }
+
     }
 
 ?>

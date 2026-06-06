@@ -80,7 +80,7 @@ $user_hard_flags = $crud->getUserFlagsByLevel($user_id, 3);
           <div class="section__text">
             <div class="link-web" style="padding: 15px; font-family: sans-serif; display: inline-block;">
               <span style="color: #555; font-size: 16px; font-weight: bold;">go to website </span>
-              <a href="../easy-Level/" style="color: #007bff; font-weight: bold; text-decoration: none; font-size: 16px;">web-easy</a>
+              <a href="../challenge/easy-Level/" target="_blank" style="color: #007bff; font-weight: bold; text-decoration: none; font-size: 16px;">web-easy</a>
             </div>
 
             <!-- Input Section for Easy Level -->
@@ -141,7 +141,7 @@ $user_hard_flags = $crud->getUserFlagsByLevel($user_id, 3);
           <div class="section__text">
             <div class="link-web" style="padding: 15px; font-family: sans-serif; display: inline-block;">
               <span style="color: #555; font-size: 16px; font-weight: bold;">go to website </span>
-              <a href="../Egypt_Arch-master/" style="color: #007bff; font-weight: bold; text-decoration: none; font-size: 16px;">web-medium</a>
+              <a href="../challenge/Egypt_Arch-master/"  target="_blank" style="color: #007bff; font-weight: bold; text-decoration: none; font-size: 16px;">web-medium</a>
             </div>
 
             <!-- Input Section for Medium Level -->
@@ -200,7 +200,7 @@ $user_hard_flags = $crud->getUserFlagsByLevel($user_id, 3);
           <div class="section__text">
             <div class="link-web" style="padding: 15px; font-family: sans-serif; display: inline-block;">
               <span style="color: #555; font-size: 16px; font-weight: bold;">go to website </span>
-              <a href="../hard-level/" style="color: #007bff; font-weight: bold; text-decoration: none; font-size: 16px;">web-hard</a>
+              <a href="../challenge/hard-level/" target="_blank" style="color: #007bff; font-weight: bold; text-decoration: none; font-size: 16px;">web-hard</a>
             </div>
 
             <!-- Input Section for Hard Level -->

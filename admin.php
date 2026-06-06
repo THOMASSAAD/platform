@@ -4,9 +4,47 @@ include_once 'database/conn.php';
 $adminMessage = '';
 $adminError = '';
 $editVulnerability = null;
+$editFlag = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['vulnerability_action'] ?? '';
+    $flag_action = $_POST['flag_action'] ?? '';
+
+    // Flag Management
+    if ($flag_action === 'add_flag') {
+        $flag_value = trim($_POST['flag_value'] ?? '');
+        $flag_level = trim($_POST['flag_level'] ?? '');
+        $flag_hint = trim($_POST['flag_hint'] ?? '');
+
+        if ($flag_value === '' || $flag_level === '') {
+            $adminError = 'Flag value and level are required.';
+        } else {
+            $inserted = $crud->insertFlag($flag_value, $flag_level, $flag_hint);
+            if ($inserted === true) {
+                header('Location: admin.php?success=flag_added#academy-section');
+                exit();
+            }
+            $adminError = 'Unable to add flag.';
+        }
+    }
+
+    if ($flag_action === 'update_flag') {
+        $flag_id = intval($_POST['flag_id'] ?? 0);
+        $flag_value = trim($_POST['flag_value'] ?? '');
+        $flag_level = trim($_POST['flag_level'] ?? '');
+        $flag_hint = trim($_POST['flag_hint'] ?? '');
+
+        if ($flag_id === 0 || $flag_value === '' || $flag_level === '') {
+            $adminError = 'All flag fields are required.';
+        } else {
+            $updated = $crud->updateFlag($flag_id, $flag_value, $flag_level, $flag_hint);
+            if ($updated === true) {
+                header('Location: admin.php?success=flag_updated#academy-section');
+                exit();
+            }
+            $adminError = 'Unable to update flag.';
+        }
+    }
 
     if ($action === 'add') {
         $title = trim($_POST['title'] ?? '');
@@ -61,6 +99,26 @@ if (isset($_GET['edit_vulnerability_id'])) {
         $adminError = 'Vulnerability not found.';
     }
 }
+
+// Flag Management - Delete
+if (isset($_GET['delete_flag_id'])) {
+    $deleteId = intval($_GET['delete_flag_id']);
+    $deleted = $crud->deleteFlag($deleteId);
+    if ($deleted === true) {
+        header('Location: admin.php?success=flag_deleted#academy-section');
+        exit();
+    }
+    $adminError = 'Unable to delete flag.';
+}
+
+// Flag Management - Edit
+if (isset($_GET['edit_flag_id'])) {
+    $editId = intval($_GET['edit_flag_id']);
+    $editFlag = $crud->getFlagById($editId);
+    if (!$editFlag) {
+        $adminError = 'Flag not found.';
+    }
+}
 ?>
 <!DOCTYPE html>
 
@@ -79,8 +137,8 @@ include "include/aside.php";
                     <h3>Dashboard</h3>
                 </a>
                 <a href="#" data-target="academy-section">
-                    <span class="material-icons-sharp">science</span>
-                    <h3>Academy</h3>
+                    <span class="material-icons-sharp">flag</span>
+                    <h3>Manage Flags</h3>
                 </a>
                 <a href="#" data-target="vulnerabilities-section">
                     <span class="material-icons-sharp">security</span>
@@ -209,49 +267,96 @@ include "include/aside.php";
             </div>
 
             <div class="recent-users tab-content" id="academy-section">
+                <?php
+                if (!empty($adminError)) {
+                    echo '<div class="alert alert-danger">' . htmlspecialchars($adminError) . '</div>';
+                }
+
+                if (isset($_GET['success'])) {
+                    $status = $_GET['success'] ?? '';
+                    $successText = match ($status) {
+                        'flag_added' => 'Flag added successfully.',
+                        'flag_updated' => 'Flag updated successfully.',
+                        'flag_deleted' => 'Flag deleted successfully.',
+                        default => ''
+                    };
+                    if ($successText !== '') {
+                        echo '<div class="alert alert-success">' . $successText . '</div>';
+                    }
+                }
+                ?>
+                
                 <div class="add-user-form">
-                    <h3>Add New Bug</h3>
-                    <form id="newvulnForm">
+                    <h3><?php echo ($editFlag ? 'Edit Flag' : 'Add New Flag'); ?></h3>
+                    <form method="POST" action="">
                         <div class="form-group">
-                            <input type="text" id="bugName" placeholder="bug Name" required>
-                            <input type="text" id="textBug" placeholder="textBug" required>
-                            <select id="catogreyBug">
-                                <option value="Injection">Injection</option>
-                                <option value="Server-Side">Server-Side</option>
-                                <option value="Client-Side">Client-Side</option>
-                                <option value="Authentication">Authentication</option>
-                                <option value="Access Control">Access Control</option>
+                            <?php if ($editFlag): ?>
+                                <input type="hidden" name="flag_id" value="<?php echo $editFlag['flag_id']; ?>">
+                                <input type="hidden" name="flag_action" value="update_flag">
+                            <?php else: ?>
+                                <input type="hidden" name="flag_action" value="add_flag">
+                            <?php endif; ?>
+                            
+                            <input type="text" name="flag_value" placeholder="Flag Value (e.g., FLAG{example_flag})" value="<?php echo ($editFlag ? htmlspecialchars($editFlag['flag_value']) : ''); ?>" required>
+                            
+                            <select name="flag_level" required>
+                                <option value="">-- Select Level --</option>
+                                <option value="1" <?php echo ($editFlag && $editFlag['level'] == 1 ? 'selected' : ''); ?>>1 - Easy</option>
+                                <option value="2" <?php echo ($editFlag && $editFlag['level'] == 2 ? 'selected' : ''); ?>>2 - Medium</option>
+                                <option value="3" <?php echo ($editFlag && $editFlag['level'] == 3 ? 'selected' : ''); ?>>3 - Hard</option>
                             </select>
+                            
+                            <textarea name="flag_hint" placeholder="Flag Hint (optional)" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%; resize: vertical; min-height: 80px;"><?php echo ($editFlag ? htmlspecialchars($editFlag['hint']) : ''); ?></textarea>
+                            
                             <button type="submit" class="btn-primary">
                                 <span class="material-icons-sharp">add</span>
-                                Add User
+                                <?php echo ($editFlag ? 'Update Flag' : 'Add Flag'); ?>
                             </button>
+                            <?php if ($editFlag): ?>
+                                <a href="admin.php#academy-section" class="btn-secondary" style="padding: 10px 20px; background-color: #999; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block;">Cancel</a>
+                            <?php endif; ?>
                         </div>
                     </form>
                 </div>
-                <h2>Manage acadmey</h2>
+                
+                <h2>Manage Flags</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>Bug ID</th>
-                            <th>Name</th>
-                            <th>catogrey</th>
-                            <th>text</th>
+                            <th>Flag ID</th>
+                            <th>Flag Value</th>
+                            <th>Level</th>
+                            <th>Hint</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>#1001</td>
-                            <td>hamza</td>
-                            <td>unknown@gmail.com</td>
-                            <td>text</td>
-                            <td>
-                                <button class="action-btn edit-btn" title="Edit"><span class="material-icons-sharp">edit</span></button>
-                                <button class="action-btn delete-btn" title="Delete"><span class="material-icons-sharp">delete</span></button>
-                            </td>
-                        </tr>
-
+                        <?php
+                        $allFlags = $crud->getAllFlags();
+                        if ($allFlags !== false && !empty($allFlags)) {
+                            foreach ($allFlags as $flag) {
+                                $levelName = match ($flag['level']) {
+                                    '1' => 'Easy',
+                                    '2' => 'Medium',
+                                    '3' => 'Hard',
+                                    default => 'Unknown'
+                                };
+                                
+                                echo '<tr>';
+                                echo '<td>#' . htmlspecialchars($flag['flag_id']) . '</td>';
+                                echo '<td style="word-break: break-all;">' . htmlspecialchars($flag['flag_value']) . '</td>';
+                                echo '<td><span class="badge" style="padding: 5px 10px; border-radius: 4px; background-color: ' . ($flag['level'] == 1 ? '#28a745' : ($flag['level'] == 2 ? '#ffc107' : '#dc3545')) . '; color: white;">' . $levelName . '</span></td>';
+                                echo '<td>' . htmlspecialchars(substr($flag['hint'] ?? '', 0, 50)) . (strlen($flag['hint'] ?? '') > 50 ? '...' : '') . '</td>';
+                                echo '<td>';
+                                echo '<a href="admin.php?edit_flag_id=' . $flag['flag_id'] . '#academy-section" class="action-btn edit-btn" title="Edit"><span class="material-icons-sharp">edit</span></a>';
+                                echo '<a href="admin.php?delete_flag_id=' . $flag['flag_id'] . '#academy-section" class="action-btn delete-btn" title="Delete" onclick="return confirm(\'Are you sure?\');"><span class="material-icons-sharp">delete</span></a>';
+                                echo '</td>';
+                                echo '</tr>';
+                            }
+                        } else {
+                            echo '<tr><td colspan="5">No flags found.</td></tr>';
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
